@@ -6,3 +6,7 @@ reference/
 .cache/
 core
 core.*
+
+__pycache__/
+*.pyc
+build/

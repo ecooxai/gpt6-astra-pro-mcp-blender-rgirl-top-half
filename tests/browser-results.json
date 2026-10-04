@@ -1,0 +1,24 @@
+[
+  {
+    "device": "desktop",
+    "revision": 1,
+    "overflow": false,
+    "score": "38",
+    "imageLoaded": true,
+    "modelCredit": "GPT-6 Astra ProMCP Colabdev · Blender / EEVEE",
+    "canvasHeight": 720,
+    "dialogOpened": true,
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "revision": 1,
+    "overflow": false,
+    "score": "38",
+    "imageLoaded": true,
+    "modelCredit": "GPT-6 Astra ProMCP Colabdev · Blender / EEVEE",
+    "canvasHeight": 582,
+    "dialogOpened": true,
+    "errors": []
+  }
+]

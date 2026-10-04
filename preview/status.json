@@ -1,8 +1,8 @@
 {
-  "version": "r03-web",
-  "revision": 3,
-  "score": 60,
-  "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next.",
+  "version": "r04-reviewed",
+  "revision": 4,
+  "score": 63,
+  "note": "The neck/chest transition and facial shading are more coherent. Remaining defects include a background horizon seam, overly flat hair masses, narrow eyes and insufficient lip volume.",
   "history": [
     {
       "iteration": 1,
@@ -21,22 +21,28 @@
       "score": 60,
       "title": "Blended facial features and denser groom",
       "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next."
+    },
+    {
+      "iteration": 4,
+      "score": 63,
+      "title": "Anatomy, neck continuity and fabric volume",
+      "note": "The neck/chest transition and facial shading are more coherent. Remaining defects include a background horizon seam, overly flat hair masses, narrow eyes and insufficient lip volume."
     }
   ],
   "views": [
     {
       "id": "front",
       "path": "assets/latest-front.png",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r03_front.png",
+      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r04_front.png",
       "resolution": "512 \u00d7 684",
-      "order": 3
+      "order": 4
     }
   ],
   "files": {
     "blend": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
       "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "version": 3
+      "version": 4
     },
     "glb": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
@@ -44,6 +50,6 @@
       "version": 3
     }
   },
-  "updated": "2026-10-04T18:06:51.970653+00:00",
+  "updated": "2026-10-04T18:13:58.477670+00:00",
   "modelStats": "773,433 triangles \u00b7 25 mesh groups \u00b7 18.2 MB GLB"
 }

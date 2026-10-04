@@ -79,6 +79,20 @@ for i in range(8):
     m=material('Hair · chestnut fiber %02d'%i,c,.43+(i%3)*.035)
     p=m.node_tree.nodes.get('Principled BSDF'); p.inputs['Anisotropic'].default_value=.37
     p.inputs['Coat Weight'].default_value=.05; p.inputs['Coat Roughness'].default_value=.3
+    nt=m.node_tree
+    tangent=nt.nodes.new('ShaderNodeTangent');tangent.direction_type='UV_MAP';tangent.uv_map='Flow'
+    nt.links.new(tangent.outputs['Tangent'],p.inputs['Tangent'])
+    p.inputs['Anisotropic'].default_value=.58
+    uv=nt.nodes.new('ShaderNodeUVMap');uv.uv_map='Flow'
+    mul=nt.nodes.new('ShaderNodeVectorMath');mul.operation='MULTIPLY';mul.inputs[1].default_value=(4,680,1)
+    nt.links.new(uv.outputs[0],mul.inputs[0])
+    no=nt.nodes.new('ShaderNodeTexNoise');no.inputs['Scale'].default_value=1;no.inputs['Detail'].default_value=1.6
+    nt.links.new(mul.outputs[0],no.inputs['Vector'])
+    ramp=nt.nodes.new('ShaderNodeValToRGB');ramp.color_ramp.elements[0].position=.18;ramp.color_ramp.elements[0].color=(*(v*.67 for v in c),1)
+    ramp.color_ramp.elements[1].position=.82;ramp.color_ramp.elements[1].color=(*(v*1.36 for v in c),1)
+    nt.links.new(no.outputs['Fac'],ramp.inputs[0]);nt.links.new(ramp.outputs['Color'],p.inputs['Base Color'])
+    bump=nt.nodes.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.14;bump.inputs['Distance'].default_value=.0012
+    nt.links.new(no.outputs['Fac'],bump.inputs['Height']);nt.links.new(bump.outputs[0],p.inputs['Normal'])
     hairm.append(m)
 
 def complexion(x,z):
@@ -171,7 +185,7 @@ for i in range(nz-1):
     for j in range(na):
         ids=(i*na+j,i*na+(j+1)%na,(i+1)*na+(j+1)%na,(i+1)*na+j)
         x=sum(verts[k][0] for k in ids)/4; y=sum(verts[k][1] for k in ids)/4; z=sum(verts[k][2] for k in ids)/4
-        hole=((abs(x)-.270)/.184)**2+((z-2.875)/.082)**2<1
+        hole=((abs(x)-.270)/.184)**2+((z-2.875)/.096)**2<1
         if not (y<-.18 and hole):faces.append(ids)
 mesh('Face and cranium · original anatomical surface',verts,faces,skin,head=True,sub=1,skincolor=True)
 # Continuous neck and upper chest; no intersecting ellipsoid at the neckline.
@@ -214,7 +228,7 @@ def inside_eye(dx,dz,side):
     u=dx/.166
     if abs(u)>1:return False
     f=max(0,1-u*u)**.41;d=dz-side*.07*dx
-    return -.0448*f<=d<=.0668*f
+    return -.0538*f<=d<=.0818*f
 iris_mats=[]
 for k in range(14):
     f=k/13; iris_mats.append(material('Iris radial fiber %02d'%k,(.052+.075*f,.020+.036*f,.010+.018*f),.20))
@@ -228,7 +242,7 @@ for s in [-1,1]:
     for ri in range(1,er+1):
         rr=ri/er
         for j in range(ea):
-            a=2*pi*j/ea;dx=.166*cos(a)*rr;dz=(.067*max(0,sin(a))**.82-.045*max(0,-sin(a))**.82+s*.07*.166*cos(a))*rr
+            a=2*pi*j/ea;dx=.166*cos(a)*rr;dz=(.082*max(0,sin(a))**.82-.054*max(0,-sin(a))**.82+s*.07*.166*cos(a))*rr
             ev.append((cx+dx,eyey(dx,dz),EZ+dz))
     for j in range(ea):ef.append((0,1+j,1+(j+1)%ea))
     for ri in range(er-1):
@@ -275,9 +289,9 @@ for s in [-1,1]:
     for r in range(loops):
         t=r/(loops-1); smooth=t*t*(3-2*t)
         for j in range(steps):
-            a=2*pi*j/steps; dx=.166*cos(a); dz=.067*max(0,sin(a))**.82-.045*max(0,-sin(a))**.82+s*.07*dx
+            a=2*pi*j/steps; dx=.166*cos(a); dz=.082*max(0,sin(a))**.82-.054*max(0,-sin(a))**.82+s*.07*dx
             ix=cx+dx; iz=EZ+dz; iy=eyey(dx,dz,.003)
-            ox=cx+.223*cos(a); oz=EZ+.136*sin(a)+s*.06*.223*cos(a)
+            ox=cx+.223*cos(a); oz=EZ+.157*sin(a)+s*.06*.223*cos(a)
             x=ix*(1-t)+ox*t; z=iz*(1-t)+oz*t
             y=front(x,z)+(iy-front(ix,iz))*(1-t)**2-.004*sin(pi*t)*(1-t)-.0005
             v.append((x,y,z))
@@ -290,12 +304,12 @@ for s in [-1,1]:
     # Fine upper lid crease, not heavy eyeliner.
     pts=[]
     for j in range(55):
-        a=.12+(pi-.24)*j/54; dx=.165*cos(a); dz=.097*sin(a)**.82+s*.07*dx
+        a=.12+(pi-.24)*j/54; dx=.165*cos(a); dz=.111*sin(a)**.82+s*.07*dx
         pts.append((cx+dx,front(cx+dx,EZ+dz)-.017,EZ+dz, sin(pi*j/54)**.5))
     curve('Upper eyelid fold '+str(s),[pts],earinner,.0017,True)
     lashes=[]
     for j in range(38):
-        a=.15+(pi-.3)*j/37; dx=.165*cos(a); dz=.067*sin(a)**.82+s*.07*dx
+        a=.15+(pi-.3)*j/37; dx=.165*cos(a); dz=.082*sin(a)**.82+s*.07*dx
         x=cx+dx; y=eyey(dx,dz,.004); z=EZ+dz
         length=.017+.022*(.5+.5*s*cos(a))+.004*random.random()
         pts=catmull([(x,y,z),(x+dx*.045,y-.012,z+length*.42),(x+dx*.075,y-.022,z+length)],7)
@@ -303,7 +317,7 @@ for s in [-1,1]:
     curve('Individual upper eyelashes '+str(s),lashes,browmat,.0011,True,res=0)
     lower=[]
     for j in range(17):
-        a=pi+.25+(pi-.5)*j/16; dx=.164*cos(a); dz=-.045*(-sin(a))**.82+s*.07*dx
+        a=pi+.25+(pi-.5)*j/16; dx=.164*cos(a); dz=-.054*(-sin(a))**.82+s*.07*dx
         p=(cx+dx,eyey(dx,dz,.004),EZ+dz); q=(p[0]+dx*.04,p[1]-.012,p[2]-.012)
         lower.append([(*p,.7),(*q,.02)])
     curve('Lower lashes '+str(s),lower,browmat,.00075,True,res=0)
@@ -341,10 +355,10 @@ for upper in [True,False]:
         for j in range(cols):
             u=-1+2*j/(cols-1); x=A*u; amp=max(0,1-u*u)
             seam=2.281-.004*u*u-.002*cos(pi*u)
-            top=seam+.038*amp**.70+.010*exp(-((abs(x)-.047)/.025)**2)-.007*exp(-(x/.021)**2)
-            bottom=seam-.055*amp**.72
+            top=seam+.052*amp**.70+.010*exp(-((abs(x)-.047)/.025)**2)-.007*exp(-(x/.021)**2)
+            bottom=seam-.072*amp**.72
             z=seam*(1-t)+(top if upper else bottom)*t
-            bulge=(.029 if upper else .037)*sin(pi*t)**1.8*amp
+            bulge=(.040 if upper else .052)*sin(pi*t)**1.8*amp
             y=front(x,z)-bulge-.010*(1-t)**2*amp-.001+.00065*sin(540*x+3*sin(180*x))*sin(pi*t)*amp
             v.append((x,y,z))
     for i in range(rows-1):
@@ -396,7 +410,13 @@ def tube(name,points,width,depth,mat,head=False,col=CHAR,sides=10):
     for i in range(n-1):
         for j in range(sides):fs.append((i*sides+j,i*sides+(j+1)%sides,(i+1)*sides+(j+1)%sides,(i+1)*sides+j))
     fs.append(tuple(reversed(range(sides)))); fs.append(tuple((n-1)*sides+j for j in range(sides)))
-    return mesh(name,vs,fs,mat,head=head,col=col)
+    ob=mesh(name,vs,fs,mat,head=head,col=col)
+    uv=ob.data.uv_layers.new(name='Flow')
+    for poly in ob.data.polygons:
+        for li in poly.loop_indices:
+            index=ob.data.loops[li].vertex_index
+            uv.data[li].uv=(index//sides/(n-1),(index%sides)/sides)
+    return ob
 for s in [-1,1]:
     ps=catmull([(s*.79,.052,1.53),(s*.98,.05,1.31),(s*1.075,.04,.86),(s*1.10,.02,.42),(s*1.12,.025,.035)],50)
     tube('Sleeve · relaxed shoulder '+str(s),ps,lambda t:(.245-.032*t+.004*sin(12*pi*t))*min(1,t/.105)**.5,lambda t:(.273-.045*t)*min(1,t/.105)**.5,shirt,sides=48)
@@ -524,6 +544,8 @@ for side in [-1,1]:
         
         if side<0:
             ps[2]=(ps[2][0],.04,ps[2][2]);ps[3]=(ps[3][0],.075,ps[3][2])
+        if k%3!=0:
+            last=ps[-1];ps.append((last[0]-side*(.085+.055*u),last[1]-.025,last[2]+.045+.035*sin(k*.9)))
         locks.append((catmull(ps,105),side,u))
 for k,(ps,side,u) in enumerate(locks):
     for i,pt in enumerate(ps):
@@ -599,12 +621,21 @@ bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,-.035)); floor=bpy.conte
 def area(name,loc,power,color,size,target=(0,0,2.3)):
     da=bpy.data.lights.new(name,'AREA'); da.energy=power; da.color=color;da.shape='DISK'; da.size=size
     ob=bpy.data.objects.new(name,da); STAGE.objects.link(ob);ob.location=loc; ob.rotation_euler=(Vector(target)-ob.location).to_track_quat('-Z','Y').to_euler();return ob
-area('Key · large soft window',(-3.5,-4.5,5.4),610,(1.0,.88,.82),3.8)
-area('Fill · cool bounce',(3,-2.8,3.2),90,(.81,.87,1),3.3)
+key=area('Key · large soft window',(-3.5,-4.5,5.4),610,(1.0,.88,.82),3.8);key.data.specular_factor=.18
+fill=area('Fill · cool bounce',(3,-2.8,3.2),90,(.81,.87,1),3.3);fill.data.specular_factor=.08
 area('Hair rim · broad strip',(1.8,1.4,4.6),300,(1,.83,.72),3.0)
-area('Eye catchlight',(-.8,-4.0,3.6),35,(1,1,1),1.4)
+catch=area('Eye catchlight',(-.8,-4.0,3.6),22,(1,1,1),.48);catch.data.shape='RECTANGLE';catch.data.size_y=.72;catch.data.diffuse_factor=.05
+# Procedural seamless photographic backdrop; no HDRI or background photograph.
+mat=bpy.data.materials.new('Studio sweep · original radial gradient');mat.use_nodes=True
+nt=mat.node_tree;nt.nodes.clear();out=nt.nodes.new('ShaderNodeOutputMaterial');em=nt.nodes.new('ShaderNodeEmission')
+uv=nt.nodes.new('ShaderNodeTexCoord');dist=nt.nodes.new('ShaderNodeVectorMath');dist.operation='DISTANCE';dist.inputs[1].default_value=(.5,.51,0)
+nt.links.new(uv.outputs['UV'],dist.inputs[0]);ramp=nt.nodes.new('ShaderNodeValToRGB')
+ramp.color_ramp.elements[0].position=.01;ramp.color_ramp.elements[0].color=(.060,.043,.048,1)
+ramp.color_ramp.elements[1].position=.31;ramp.color_ramp.elements[1].color=(.009,.007,.010,1)
+nt.links.new(dist.outputs['Value'],ramp.inputs[0]);nt.links.new(ramp.outputs[0],em.inputs[0]);em.inputs[1].default_value=.8;nt.links.new(em.outputs[0],out.inputs[0])
+bpy.ops.mesh.primitive_plane_add(size=12,location=(0,3.6,2.10),rotation=(pi/2,0,0));sweep=bpy.context.object;sweep.name='Studio seamless sweep';sweep.data.materials.append(mat);link(sweep,STAGE)
 da=bpy.data.cameras.new('Portrait camera');cam=bpy.data.objects.new('Portrait camera',da);STAGE.objects.link(cam);scene.camera=cam
-cam.location=(0,-8.3,2.35);target=Vector((0,-.02,2.075));cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler();da.type='ORTHO';da.ortho_scale=3.83;da.lens=80
+cam.location=(0,-8.3,2.35);target=Vector((0,-.02,2.075));cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler();da.type='PERSP';da.ortho_scale=3.83;da.lens=78;da.sensor_fit='VERTICAL';da.sensor_height=36
 scene.render.filepath=str(OUT/f'gpt6_astra_pro_mcp_blender_rgirl_r{REV:02d}_front.png')
 scene['authorship']='GPT-6 Astra Pro · MCP Colabdev · Blender 4.2 EEVEE'
 scene['asset_provenance']='All character meshes, curves and material definitions are original code. No imported character assets or image textures.'
