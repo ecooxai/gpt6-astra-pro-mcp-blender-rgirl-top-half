@@ -1,8 +1,8 @@
 {
-  "version": "r04-reviewed",
-  "revision": 4,
-  "score": 63,
-  "note": "The neck/chest transition and facial shading are more coherent. Remaining defects include a background horizon seam, overly flat hair masses, narrow eyes and insufficient lip volume.",
+  "version": "r05-2026-10-04T20:24:19.950720+00:00",
+  "revision": 5,
+  "score": 64,
+  "note": "Actual EEVEE render reviewed. Eye aperture and lips improved; the face remains mannequin-like, the broad hair strips remain visible, and the floor/backdrop transition needs removal.",
   "history": [
     {
       "iteration": 1,
@@ -27,22 +27,30 @@
       "score": 63,
       "title": "Anatomy, neck continuity and fabric volume",
       "note": "The neck/chest transition and facial shading are more coherent. Remaining defects include a background horizon seam, overly flat hair masses, narrow eyes and insufficient lip volume."
+    },
+    {
+      "iteration": 5,
+      "score": 64,
+      "title": "Open eyes, fuller lips and studio lighting",
+      "note": "Actual EEVEE render reviewed. Eye aperture and lips improved; the face remains mannequin-like, the broad hair strips remain visible, and the floor/backdrop transition needs removal.",
+      "reviewed": "2026-10-04T20:24:19.950720+00:00",
+      "assessment": "Subjective visual review; not an independent likeness score."
     }
   ],
   "views": [
     {
       "id": "front",
       "path": "assets/latest-front.png",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r04_front.png",
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_r05_front.png",
       "resolution": "512 \u00d7 684",
-      "order": 4
+      "order": 50
     }
   ],
   "files": {
     "blend": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "version": 4
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
+      "version": 5
     },
     "glb": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
@@ -50,6 +58,11 @@
       "version": 3
     }
   },
-  "updated": "2026-10-04T18:13:58.477670+00:00",
-  "modelStats": "773,433 triangles \u00b7 25 mesh groups \u00b7 18.2 MB GLB"
+  "updated": "2026-10-04T20:24:19.950720+00:00",
+  "modelStats": "773,433 triangles \u00b7 25 mesh groups \u00b7 19.1 MB GLB \u00b7 revision 3",
+  "project": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half",
+  "build": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust",
+  "completedReviewedIterations": 5,
+  "requestedIterations": 20000,
+  "targetReached": false
 }

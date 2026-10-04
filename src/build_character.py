@@ -21,10 +21,12 @@ scene.render.image_settings.file_format='PNG'
 scene.render.film_transparent=False
 scene.view_settings.view_transform='AgX'
 scene.view_settings.look='AgX - Medium High Contrast'
-scene.view_settings.exposure=.22
+scene.view_settings.exposure=.10
 scene.render.image_settings.color_mode='RGBA'
 if os.environ.get('FAST_PREVIEW')=='1':
     scene.render.resolution_x=512;scene.render.resolution_y=684;scene.eevee.taa_render_samples=16
+if os.environ.get('FAST_PREVIEW')=='2':
+    scene.render.resolution_x=384;scene.render.resolution_y=512;scene.eevee.taa_render_samples=8
 CHAR=bpy.data.collections.new('CHARACTER · handcrafted'); scene.collection.children.link(CHAR)
 STAGE=bpy.data.collections.new('STUDIO · EEVEE'); scene.collection.children.link(STAGE)
 FINE=bpy.data.collections.new('RENDER ONLY · fine groom'); scene.collection.children.link(FINE)
@@ -153,7 +155,7 @@ def interp(z,ps):
             return (2*t**3-3*t*t+1)*ps[i][1]+(t**3-2*t*t+t)*h*slopes[i]+(-2*t**3+3*t*t)*ps[i+1][1]+(t**3-t*t)*h*slopes[i+1]
 
 W=[(2.035,.035),(2.08,.19),(2.16,.30),(2.28,.406),(2.44,.488),(2.62,.54),(2.82,.553),(3.04,.553),(3.24,.55),(3.42,.51),(3.58,.40),(3.70,.23),(3.765,.005)]
-D=[(2.035,.255),(2.12,.375),(2.30,.438),(2.52,.460),(2.80,.470),(3.02,.485),(3.25,.470),(3.45,.425),(3.62,.30),(3.765,.003)]
+D=[(2.035,.255),(2.12,.410),(2.30,.438),(2.52,.460),(2.80,.470),(3.02,.485),(3.25,.470),(3.45,.425),(3.62,.30),(3.765,.003)]
 B=[(2.035,.04),(2.18,.28),(2.50,.44),(2.90,.51),(3.25,.50),(3.5,.43),(3.7,.22),(3.765,.003)]
 
 def front(x,z):
@@ -161,14 +163,14 @@ def front(x,z):
     y-=.038*exp(-((abs(x)-.34)/.18)**2-((z-2.63)/.16)**2)
     y-=.024*exp(-((abs(x)-.27)/.20)**2-((z-3.045)/.080)**2)
     y-=.016*exp(-((abs(x)-.29)/.185)**2-((z-2.765)/.074)**2)
-    y-=.014*exp(-(x/.145)**2-((z-2.142)/.07)**2)
+    y-=.042*exp(-(x/.145)**2-((z-2.142)/.07)**2)
     y+=.013*exp(-((abs(x)-.49)/.10)**2-((z-2.99)/.20)**2)
     y+=.006*exp(-(x/.014)**2-((z-2.407)/.066)**2)
     y+=.010*exp(-(x/.12)**2-((z-2.192)/.035)**2)
     y-=.025*exp(-(x/.22)**2-((z-2.30)/.14)**2)
-    y-=.112*exp(-(x/.080)**2-((z-2.785)/.22)**2)
-    y-=.176*exp(-(x/.093)**2-((z-2.567)/.080)**2)
-    y-=.070*exp(-((abs(x)-.083)/.041)**2-((z-2.533)/.044)**2)
+    y-=.082*exp(-(x/.078)**2-((z-2.785)/.22)**2)
+    y-=.126*exp(-(x/.096)**2-((z-2.567)/.073)**2)
+    y-=.056*exp(-((abs(x)-.083)/.043)**2-((z-2.533)/.044)**2)
     y-=.025*exp(-(x/.026)**2-((z-2.512)/.031)**2)
     y-=.019*exp(-(x/.040)**2-((z-2.414)/.067)**2)
     return y
@@ -408,7 +410,7 @@ def tube(name,points,width,depth,mat,head=False,col=CHAR,sides=10):
         for j in range(sides):
             a=2*pi*j/sides; q=p+side*(cos(a)*ww)+normal*(sin(a)*dd); vs.append(tuple(q))
     for i in range(n-1):
-        for j in range(sides):fs.append((i*sides+j,i*sides+(j+1)%sides,(i+1)*sides+(j+1)%sides,(i+1)*sides+j))
+        for j in range(sides):fs.append((i*sides+j,(i+1)*sides+j,(i+1)*sides+(j+1)%sides,i*sides+(j+1)%sides))
     fs.append(tuple(reversed(range(sides)))); fs.append(tuple((n-1)*sides+j for j in range(sides)))
     ob=mesh(name,vs,fs,mat,head=head,col=col)
     uv=ob.data.uv_layers.new(name='Flow')
@@ -470,160 +472,22 @@ for idx,z in enumerate([.20,.59,.985]):
     for dx,dz in [(-.008,-.008),(.008,-.008),(-.008,.008),(.008,.008)]:uv('Button thread hole',(x+dx,y-.006,z+dz),(.0035,.002,.0035),buttonhole,seg=16,rings=8)
     curve('Button sewing thread',[[ (x-.009,y-.009,z-.008,.7),(x+.009,y-.009,z+.008,.7)],[(x-.009,y-.009,z+.008,.7),(x+.009,y-.009,z-.008,.7)]],shirt,.001)
 
-# Hair scalp and long layered guide locks. Every strand is a generated 3D curve.
-vs=[]; fs=[]; rows=40; ns=144
-for i in range(rows):
-    t=i/(rows-1)
-    for j in range(ns):
-        th=2*pi*j/ns;c=cos(th)
-        zend=3.39-.74*(1-c)/2
-        z=3.813-t*(3.813-zend);zz=z-.05
-        taper=min(1,max(0,(3.813-z)/.045))**.45
-        w=(interp(zz,W)+.034)*taper
-        x=w*sin(th)
-        y=.035-(interp(zz,D)+.048)*max(c,0)**.67 if c>=0 else .035+(interp(zz,B)+.042)*(-c)**.85
-        if t<.016:y=.035+(y-.035)*t/.016
-
-        vs.append((x,y,z))
-for i in range(rows-1):
-    for j in range(ns):fs.append((i*ns+j,i*ns+(j+1)%ns,(i+1)*ns+(j+1)%ns,(i+1)*ns+j))
-capmat=hairm[0].copy();capmat.name='Hair scalp · matte fiber foundation'
-cp=capmat.node_tree.nodes.get('Principled BSDF');cp.inputs['Roughness'].default_value=.64;cp.inputs['Coat Weight'].default_value=0
-nn=capmat.node_tree.nodes.new('ShaderNodeTexNoise');nn.inputs['Scale'].default_value=290;nn.inputs['Detail'].default_value=2
-bb=capmat.node_tree.nodes.new('ShaderNodeBump');bb.inputs['Strength'].default_value=.28;bb.inputs['Distance'].default_value=.007
-capmat.node_tree.links.new(nn.outputs['Fac'],bb.inputs['Height']);capmat.node_tree.links.new(bb.outputs['Normal'],cp.inputs['Normal'])
-mesh('Hair · original fitted scalp shell',vs,fs,capmat,head=True,sub=1)
-frontfibers=[[] for _ in range(8)];frontlod=[[] for _ in range(8)]
-for k in range(1500):
-    side=-1 if k<970 else 1;u=random.random();theta=side*(.035+1.55*u)
-    zend=3.39-.74*(1-cos(theta))/2+random.uniform(-.025,.01)
-    we=interp(zend-.05,W)+.034;xe=we*sin(theta)
-    xr=.11+random.uniform(-.016,.018);zr=3.784+random.uniform(-.006,.011)
-    path=[]
-    for j in range(55):
-        t=j/54;z=zr-(zr-zend)*sin(t*pi/2)**.86
-        x=xr+(xe-xr)*sin(t*pi/2)**1.12
-        w=interp(z-.05,W)+.034;c=sqrt(max(0,1-(x/w)**2))
-        y=.035-(interp(z-.05,D)+.048)*c**.67-.008-random.random()*.001
-        path.append((x,y,z,(.35+.65*sin(pi*t)**.3)*(1-.75*t**12)))
-    frontfibers[k%8].append(path)
-    if k%8==0:frontlod[k%8].append(path[::2]+[path[-1]])
-for k in range(8):
-    curve('Crown swept fibers · render '+str(k),frontfibers[k],hairm[k],.0009,True,FINE,0)
-    if frontlod[k]:curve('Crown swept fibers · web '+str(k),frontlod[k],hairm[k],.00115,True,CHAR,0)
-# Rear and side hair envelope, fully modeled for 360 degree viewing.
-vs=[]; fs=[]; rows=66; cols=110
-for i in range(rows):
-    t=i/(rows-1); z=3.28-2.95*t
-    w=interp(t,[(0,.55),(.20,.625),(.45,.675),(.70,.75),(.90,.70),(1,.56)])
-    dep=interp(t,[(0,.46),(.24,.44),(.50,.46),(1,.40)])
-    cy=interp(t,[(0,.065),(.25,.03),(.53,-.06),(.77,-.14),(1,-.10)])
-    for j in range(cols):
-        leftgap=.90+.68*exp(-((z-2.74)/.32)**2); th=.90+(2*pi-.90-leftgap)*j/(cols-1); wave=.014*sin(th*18+t*12)+.013*sin(th*9-t*10)
-        x=(w+wave)*sin(th); y=cy-dep*cos(th); zz=z+.08*sin(th*5)*t**6
-        vs.append((x,y,zz))
-for i in range(rows-1):
-    for j in range(cols-1):fs.append((i*cols+j,i*cols+j+1,(i+1)*cols+j+1,(i+1)*cols+j))
-mesh('Hair · continuous rear silhouette',vs,fs,hairm[1],head=True,sub=1)
-# Flowing side guide locks. Flattened elliptical geometry, tapered tips, mild waves.
-locks=[]
-for side in [-1,1]:
-    for k in range(46):
-        u=k/45; yy=-.24+.65*u; root=(.10+side*.027,yy,3.80-.31*abs(yy)**1.5)
-        endz=.26+random.random()*.37
-        xx=side*(.52+.17*random.random())
-        ps=[root,(side*.30,yy-.03,3.74-.12*u),(side*.56,yy-.03,3.38),(side*(.59+.06*u),yy+.02,2.91),(side*(.60+.08*u),yy-.01,2.28),(side*(.63+.09*u),yy-.34,1.55),(side*(.75-.03*u),yy-.37,.82),(xx,yy-.30,endz)]
-        
-        if side<0:
-            ps[3]=(ps[3][0],max(.095,ps[3][1]),ps[3][2]);ps[4]=(ps[4][0],max(.02,ps[4][1]),ps[4][2])
-        locks.append((catmull(ps,105),side,u))
-    # Front shoulder cascades, asymmetrical side part framing the face.
-    for k in range(36):
-        u=k/35; yy=-.09-u*.17
-        ps=[(.105+side*.024,-.19,3.80),(side*.36,-.40-u*.025,3.56),(side*(.55+.035*u),-.33,3.04),(side*(.58+.075*u),-.24,2.48),(side*(.54+.26*u),-.42,1.95),(side*(.53+.44*u),-.59-.055*u,1.30),(side*(.59+.42*u),-.64-.04*u,.77),(side*(.43+.35*u),-.55,.27+.34*u)]
-        
-        if side<0:
-            ps[2]=(ps[2][0],.04,ps[2][2]);ps[3]=(ps[3][0],.075,ps[3][2])
-        if k%3!=0:
-            last=ps[-1];ps.append((last[0]-side*(.085+.055*u),last[1]-.025,last[2]+.045+.035*sin(k*.9)))
-        locks.append((catmull(ps,105),side,u))
-for k,(ps,side,u) in enumerate(locks):
-    for i,pt in enumerate(ps):
-        t=i/(len(ps)-1);f=max(0,(t-.43)/.57)**1.3
-        pt.x+=side*f*(.043*sin(12*t+u*4)+.027*sin(18*t+u*2))
-        pt.y+=f*.025*sin(13*t+u*4)
-    # Guide-specific motion is shared by its tube and every associated filament.
-    phase=1.4+u*5.8+(k%7)*.15
-    for i,pt in enumerate(ps):
-        t=i/(len(ps)-1);flow=max(0,(t-.36)/.64)
-        pt.x+=side*.041*sin(flow*2.3*pi+phase)*flow**1.1
-        pt.y+=.060*sin(flow*1.9*pi+phase)*flow**1.1
-        if k>=92:
-            pt.y-=.04*sin(u*pi)*flow
-            pt.z+=.065*sin(phase)*flow**5
-    width=.026+random.random()*.027
-    tube('Hair lock %03d · swept and tapered'%k,ps,lambda t,w=width:w*(.30+.70*sin(pi*min(t,.999))**.45)*(1-t**5),lambda t:.024*(.25+.75*sin(pi*t)**.45)*(1-t**5),hairm[k%4],True,sides=8)
-# Thousands of explicitly modeled fine filaments, plus a reduced export groom.
-fine=[[] for _ in range(8)]; lod=[[] for _ in range(8)]
-for k,(ps,side,u) in enumerate(locks):
-    for j in range(26):
-        phase=random.random()*pi*2; off=(j/25-.5)*.088; d=random.uniform(-.009,.009)
-        path=[]
-        for i,p in enumerate(ps):
-            t=i/(len(ps)-1); dx=off*sin(pi*t)**.45+.003*sin(phase+t*15); dy=-.028+d+.0018*sin(phase+t*19)
-            path.append((p.x+dx,p.y+dy,p.z+.003*sin(phase+t*11),(.15+.85*sin(pi*min(t,.999))**.22)*(1-t**14)))
-        fine[(j+k)%8].append(path)
-        if j in [3,10,17,24]:lod[(j+k)%8].append(path[::2]+[path[-1]])
-for i,paths in enumerate(fine):curve('Fine hair · render groom %d'%i,paths,hairm[i],.00085,True,FINE,0)
-for i,paths in enumerate(lod):curve('Hair filaments · web groom %d'%i,paths,hairm[i],.0010,True,CHAR,0)
-# Short side-swept fringe is independent of the long-hair guides.
-fringes=[[(.11,-.22,3.80),(-.13,-.46,3.57),(-.32,-.49,3.25),(-.42,-.48,2.98),(-.48,-.42,2.65)],[(.12,-.22,3.78),(-.02,-.49,3.48),(-.14,-.51,3.22),(-.24,-.49,2.99)],[(.14,-.23,3.77),(.11,-.49,3.48),(.06,-.53,3.20),(-.025,-.50,2.998)],[(.16,-.23,3.78),(.21,-.50,3.45),(.21,-.53,3.20),(.12,-.50,3.035)]]
-for k,guide in enumerate(fringes):
-    ps=catmull(guide,65)
-    tube('Fringe · wispy cluster %d'%k,ps,lambda t:.012*(.25+.75*sin(pi*t)**.5)*(1-t**5),lambda t:.0028*(1-t**6),hairm[2],True,sides=8)
-    paths=[]
-    for j in range(30):
-        off=(j/29-.5)*(.067 if k==0 else .045); path=[]
-        for i,p in enumerate(ps):
-            t=i/(len(ps)-1); path.append((p.x+off*t**.5,p.y-.007-random.random()*.001,p.z+.006*sin(t*pi+j),(.55+.45*sin(pi*t))*(1-t**9)))
-        paths.append(path)
-    curve('Fringe filaments %d'%k,paths,hairm[4],.00085,True,res=0)
-# Individually separated short hairs soften the fringe boundary and side part.
-wisps=[]
-for k in range(85):
-    g=fringes[k%4];ps=catmull(g,58);off=random.uniform(-.027,.030);end=random.uniform(.84,1.02)
-    path=[]
-    for i,p in enumerate(ps):
-        t=i/(len(ps)-1)
-        if t>end:break
-        path.append((p.x+off*sin(t*pi/2),p.y-.010-.003*sin(t*pi),p.z+.018*sin(k*.65)*t*t,(.35+.5*sin(pi*t))*(1-(t/end)**6)))
-    if len(path)>2:wisps.append(path)
-curve('Fringe · separated fine baby hairs',wisps,hairm[3],.00065,True,CHAR,0)
-
-# A few airy flyaways; no opaque cards or alpha texture shortcuts.
-paths=[]
-for k in range(90):
-    ps,side,u=random.choice(locks); phase=random.random()*2*pi
-    path=[]
-    for i in range(0,len(ps),2):
-        p=ps[i]; t=i/(len(ps)-1); off=.006+.015*sin(pi*t)
-        path.append((p.x+side*off,p.y-.024-.008*sin(phase+8*t),p.z+.013*sin(phase+7*t),(.1+.8*sin(pi*t)**.6)*(1-t**7)))
-    paths.append(path)
-curve('Hair · airy flyaway strands',paths,hairm[5],.0006,True,FINE,0)
+# Original all-angle strand groom; no imported assets.
+exec((ROOT/'src'/'groom_v2.py').read_text(),globals())
 
 # Neutral portrait atelier lighting, with no downloaded HDR environment.
 world=bpy.data.worlds.new('Studio · neutral ambient'); scene.world=world; world.use_nodes=True
 world.node_tree.nodes.get('Background').inputs[0].default_value=(.28,.30,.34,1)
 world.node_tree.nodes.get('Background').inputs[1].default_value=.18
 back=material('Backdrop · slate taupe',(.075,.071,.077),.87)
-bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,-.035)); floor=bpy.context.object; floor.name='Studio floor';floor.data.materials.append(back);link(floor,STAGE)
+bpy.ops.mesh.primitive_plane_add(size=200,location=(0,0,-.035)); floor=bpy.context.object; floor.name='Studio floor';floor.data.materials.append(back);link(floor,STAGE);floor.hide_render=True
 
 def area(name,loc,power,color,size,target=(0,0,2.3)):
     da=bpy.data.lights.new(name,'AREA'); da.energy=power; da.color=color;da.shape='DISK'; da.size=size
     ob=bpy.data.objects.new(name,da); STAGE.objects.link(ob);ob.location=loc; ob.rotation_euler=(Vector(target)-ob.location).to_track_quat('-Z','Y').to_euler();return ob
 key=area('Key · large soft window',(-3.5,-4.5,5.4),610,(1.0,.88,.82),3.8);key.data.specular_factor=.18
 fill=area('Fill · cool bounce',(3,-2.8,3.2),90,(.81,.87,1),3.3);fill.data.specular_factor=.08
-area('Hair rim · broad strip',(1.8,1.4,4.6),300,(1,.83,.72),3.0)
+rim=area('Hair rim · broad strip',(1.8,1.4,4.6),180,(.89,.92,1),3.4);rim.data.specular_factor=.5
 catch=area('Eye catchlight',(-.8,-4.0,3.6),22,(1,1,1),.48);catch.data.shape='RECTANGLE';catch.data.size_y=.72;catch.data.diffuse_factor=.05
 # Procedural seamless photographic backdrop; no HDRI or background photograph.
 mat=bpy.data.materials.new('Studio sweep · original radial gradient');mat.use_nodes=True
