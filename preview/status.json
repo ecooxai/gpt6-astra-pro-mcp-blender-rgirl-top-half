@@ -1,8 +1,8 @@
 {
-  "version": "r02-reviewed",
-  "revision": 2,
-  "score": 52,
-  "note": "The jaw, eye masking and collar are improved. Remaining issues: raised eyelid rings, sparse scalp fibers, rigid hair volume and an overly flat face.",
+  "version": "r03-web",
+  "revision": 3,
+  "score": 60,
+  "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next.",
   "history": [
     {
       "iteration": 1,
@@ -15,23 +15,35 @@
       "score": 52,
       "title": "Structural repair",
       "note": "The jaw, eye masking and collar are improved. Remaining issues: raised eyelid rings, sparse scalp fibers, rigid hair volume and an overly flat face."
+    },
+    {
+      "iteration": 3,
+      "score": 60,
+      "title": "Blended facial features and denser groom",
+      "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next."
     }
   ],
   "views": [
     {
       "id": "front",
       "path": "assets/latest-front.png",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r02_front.png",
-      "resolution": "768 \u00d7 1024",
-      "order": 2
+      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r03_front.png",
+      "resolution": "512 \u00d7 684",
+      "order": 3
     }
   ],
   "files": {
     "blend": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
       "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "version": 2
+      "version": 3
+    },
+    "glb": {
+      "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
+      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
+      "version": 3
     }
   },
-  "updated": "2026-10-04T17:55:56.783444+00:00"
+  "updated": "2026-10-04T18:06:51.970653+00:00",
+  "modelStats": "773,433 triangles \u00b7 25 mesh groups \u00b7 18.2 MB GLB"
 }
