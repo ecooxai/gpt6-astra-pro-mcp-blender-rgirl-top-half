@@ -4,3 +4,5 @@ logs/
 *.blend2
 reference/
 .cache/
+core
+core.*
