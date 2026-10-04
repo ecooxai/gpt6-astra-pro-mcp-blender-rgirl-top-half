@@ -1,0 +1,6 @@
+node_modules/
+logs/
+*.blend1
+*.blend2
+reference/
+.cache/
