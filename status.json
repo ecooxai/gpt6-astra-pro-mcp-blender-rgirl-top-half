@@ -1,8 +1,8 @@
 {
-  "version": "r03-web",
-  "revision": 3,
-  "score": 60,
-  "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next.",
+  "version": "r07-2026-10-04T20:47:53.409965+00:00",
+  "revision": 7,
+  "score": 66,
+  "note": "Front, face detail, and profile were visually reviewed. Hair gaps are reduced and the profile is improved. Remaining problems are pasted-on eye transitions, a dark mouth trough, a helmet-like crown, and insufficient natural facial detail. Proxy-groom previews; the source retains the complete groom. The web file now matches revision 7.",
   "history": [
     {
       "iteration": 1,
@@ -21,29 +21,78 @@
       "score": 60,
       "title": "Blended facial features and denser groom",
       "note": "Eyelid transitions, brows and shirt opening improved. The face remains too smooth and the hair is still a flat panel-like silhouette; finer anatomy and depth are next."
+    },
+    {
+      "iteration": 4,
+      "score": 63,
+      "title": "Anatomy, neck continuity and fabric volume",
+      "note": "The neck/chest transition and facial shading are more coherent. Remaining defects include a background horizon seam, overly flat hair masses, narrow eyes and insufficient lip volume."
+    },
+    {
+      "iteration": 5,
+      "score": 64,
+      "title": "Open eyes, fuller lips and studio lighting",
+      "note": "Actual EEVEE render reviewed. Eye aperture and lips improved; the face remains mannequin-like, the broad hair strips remain visible, and the floor/backdrop transition needs removal.",
+      "reviewed": "2026-10-04T20:24:19.950720+00:00",
+      "assessment": "Subjective visual review; not an independent likeness score."
+    },
+    {
+      "iteration": 6,
+      "score": 61,
+      "title": "All-angle groom test: curl-volume regression",
+      "note": "Actual EEVEE render reviewed. The softer nose and chin help, but the new shoulder curls bunch into rope-like loops and expose white gaps. This regression is recorded honestly; the next pass widens the continuous hair layers and integrates smaller eyes.",
+      "reviewed": "2026-10-04T20:33:19.527669+00:00",
+      "assessment": "Subjective visual review; not an independent likeness score."
+    },
+    {
+      "iteration": 7,
+      "score": 66,
+      "title": "Smaller eyes and connected shoulder layers",
+      "note": "Front, face detail, and profile were visually reviewed. Hair gaps are reduced and the profile is improved. Remaining problems are pasted-on eye transitions, a dark mouth trough, a helmet-like crown, and insufficient natural facial detail. Proxy-groom previews; the source retains the complete groom. The web file now matches revision 7.",
+      "reviewed": "2026-10-04T20:47:53.409965+00:00",
+      "assessment": "Subjective visual review; not an independent likeness score."
     }
   ],
   "views": [
     {
       "id": "front",
       "path": "assets/latest-front.png",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r03_front.png",
-      "resolution": "512 \u00d7 684",
-      "order": 3
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_r07_front.png",
+      "resolution": "384 \u00d7 512",
+      "order": 70
+    },
+    {
+      "id": "detail",
+      "path": "assets/latest-detail.png",
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_r07_detail.png",
+      "resolution": "480 \u00d7 480",
+      "order": 69
+    },
+    {
+      "id": "side",
+      "path": "assets/latest-side.png",
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_r07_side.png",
+      "resolution": "384 \u00d7 512",
+      "order": 67
     }
   ],
   "files": {
     "blend": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
-      "version": 3
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_r07.blend",
+      "version": 7
     },
     "glb": {
       "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
-      "version": 3
+      "absolute": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust/gpt6_astra_pro_mcp_blender_rgirl_top_half.glb",
+      "version": 7
     }
   },
-  "updated": "2026-10-04T18:06:51.970653+00:00",
-  "modelStats": "773,433 triangles \u00b7 25 mesh groups \u00b7 18.2 MB GLB"
+  "updated": "2026-10-04T20:47:53.409965+00:00",
+  "modelStats": "475,967 triangles \u00b7 28 mesh groups \u00b7 1.5 MB GLB \u00b7 revision 7",
+  "project": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half",
+  "build": "/build/gpt6_astra_pro_mcp_colabdev_blender_rgirl_bust",
+  "completedReviewedIterations": 7,
+  "requestedIterations": 20000,
+  "targetReached": false
 }

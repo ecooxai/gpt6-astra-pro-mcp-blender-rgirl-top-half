@@ -1,0 +1,82 @@
+{
+  "started": "2026-10-04T20:47:54.050Z",
+  "checks": [
+    {
+      "name": "desktop HTTP",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "desktop layout",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "model credit",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "reference dialog",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "3D finite bounds",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "turntable toggle",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "wireframe toggle",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile layout",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "mobile 3D loaded",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "no JavaScript errors",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/tests/gpt6_astra_pro_mcp_colabdev_blender_desktop_review.png",
+    "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/tests/gpt6_astra_pro_mcp_colabdev_blender_desktop_orbit.png",
+    "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/tests/gpt6_astra_pro_mcp_colabdev_blender_mobile_review.png"
+  ],
+  "desktop3D": {
+    "bounds": [
+      2.672156140378029,
+      3.9326983116559506,
+      1.3935628067594796
+    ],
+    "render": {
+      "calls": 28,
+      "triangles": 475967,
+      "cpuSubmitMs": 575
+    },
+    "revision": 7,
+    "errors": []
+  },
+  "mobile3D": {
+    "calls": 28,
+    "triangles": 475967,
+    "cpuSubmitMs": 282.5
+  },
+  "success": true,
+  "finished": "2026-10-04T20:48:47.431Z"
+}
