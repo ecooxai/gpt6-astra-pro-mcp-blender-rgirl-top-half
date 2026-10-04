@@ -1,25 +1,37 @@
 {
-  "version": "r01-reviewed",
-  "revision": 1,
-  "score": 38,
-  "note": "First blockout: visible eye-mask failures, scalp intersections, lumpy jaw and rigid hair. Major structural revision in progress.",
+  "version": "r02-reviewed",
+  "revision": 2,
+  "score": 52,
+  "note": "The jaw, eye masking and collar are improved. Remaining issues: raised eyelid rings, sparse scalp fibers, rigid hair volume and an overly flat face.",
   "history": [
     {
       "iteration": 1,
       "score": 38,
       "title": "First anatomical blockout",
       "note": "Actual EEVEE image reviewed. Repair eye masking, cranial hair coverage, jaw interpolation, collar silhouette and shoulder seams."
+    },
+    {
+      "iteration": 2,
+      "score": 52,
+      "title": "Structural repair",
+      "note": "The jaw, eye masking and collar are improved. Remaining issues: raised eyelid rings, sparse scalp fibers, rigid hair volume and an overly flat face."
     }
   ],
   "views": [
     {
       "id": "front",
       "path": "assets/latest-front.png",
-      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r01_front.png",
+      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_r02_front.png",
       "resolution": "768 \u00d7 1024",
-      "order": 1
+      "order": 2
     }
   ],
-  "files": {},
-  "updated": "2026-10-04T17:44:32.623631+00:00"
+  "files": {
+    "blend": {
+      "path": "assets/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
+      "absolute": "/home/dev/project/3d/gpt6_astra_pro_mcp_blender_rgirl_top_half/build/gpt6_astra_pro_mcp_blender_rgirl_top_half.blend",
+      "version": 2
+    }
+  },
+  "updated": "2026-10-04T17:55:56.783444+00:00"
 }
